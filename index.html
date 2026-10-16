@@ -1,0 +1,1262 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GFS Eingangsklasse</title>
+<meta name="description" content="Alles zur GFS in der Eingangsklasse des beruflichen Gymnasiums: Ablauf, Handout, Kolloquium, KI, Bewertung und Material – für Schüler:innen und Lehrkräfte.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   FARBEN & GRUNDWERTE  (hier zentral anpassbar)
+   ========================================================= */
+:root{
+  --bg:#f7f4ee; --surface:#ffffff; --surface-2:#fbf9f5;
+  --ink:#1b1f2a; --muted:#5b6070; --line:#e6e0d4;
+  --accent:#d9472f; --accent-soft:#fde8e2;          /* Durchführung */
+  --gold:#b7790f;   --gold-soft:#fcf0d4; --gold-fill:#f2b134; /* Handout */
+  --teal:#1c6d68;   --teal-soft:#dcefeb;            /* Kolloquium */
+  --ok:#2c7a3f; --ok-soft:#e1f2e5; --no:#b3261e; --no-soft:#fbe4e2;
+  --shadow:0 1px 2px rgba(27,31,42,.05),0 6px 24px -12px rgba(27,31,42,.18);
+  --radius:16px; --maxw:1120px;
+  --font-display:"Fraunces",Georgia,serif;
+  --font:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#14161c; --surface:#1d2029; --surface-2:#191c24;
+    --ink:#ecebe6; --muted:#a6aab6; --line:#2f333e;
+    --accent:#ff7d62; --accent-soft:#3a221d;
+    --gold:#f5c45a; --gold-soft:#33291a; --gold-fill:#e0a630;
+    --teal:#62c6ba; --teal-soft:#16302e;
+    --ok:#7fd28f; --ok-soft:#18301e; --no:#ff8a80; --no-soft:#3a1d1b;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 28px -14px rgba(0,0,0,.6);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14161c; --surface:#1d2029; --surface-2:#191c24;
+  --ink:#ecebe6; --muted:#a6aab6; --line:#2f333e;
+  --accent:#ff7d62; --accent-soft:#3a221d;
+  --gold:#f5c45a; --gold-soft:#33291a; --gold-fill:#e0a630;
+  --teal:#62c6ba; --teal-soft:#16302e;
+  --ok:#7fd28f; --ok-soft:#18301e; --no:#ff8a80; --no-soft:#3a1d1b;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 28px -14px rgba(0,0,0,.6);
+  color-scheme:dark;
+}
+
+/* =========================================================
+   BASIS
+   ========================================================= */
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:128px;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 var(--font);overflow-x:hidden}
+img,svg{display:block;max-width:100%}
+a{color:inherit}
+h1,h2,h3{font-family:var(--font-display);font-weight:650;line-height:1.15;margin:0;letter-spacing:-.01em}
+h2{font-size:clamp(1.6rem,3.4vw,2.2rem)}
+h3{font-size:1.15rem;font-family:var(--font);font-weight:700;letter-spacing:0}
+p{margin:0}
+ul{margin:0;padding-left:1.15em}
+li+li{margin-top:.35em}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 16px}
+@media (min-width:720px){.wrap{padding:0 28px}}
+.ico{width:1.25em;height:1.25em;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+.skip{position:absolute;left:-999px;top:8px;background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:8px;z-index:100}
+.skip:focus{left:8px}
+
+/* =========================================================
+   KOPFBEREICH & REITER
+   ========================================================= */
+header.top{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:12px;justify-content:space-between;padding-top:10px;padding-bottom:10px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
+.brand-mark{width:36px;height:36px;border-radius:10px;background:var(--ink);color:var(--bg);display:grid;place-items:center;font:700 .8rem/1 var(--font);letter-spacing:.04em;flex:none}
+.brand-txt{font-weight:700;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand-txt small{display:block;font-weight:500;color:var(--muted);font-size:.75rem}
+.tabs{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px;gap:2px;flex:none}
+.tab{appearance:none;border:0;background:transparent;color:var(--muted);font:600 .88rem/1 var(--font);padding:9px 14px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+.tab .long{display:none}
+@media (min-width:560px){.tab .long{display:inline}.tab .short{display:none}}
+.subnav{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:10px;margin:0 -16px;padding-left:16px;padding-right:16px}
+.subnav::-webkit-scrollbar{display:none}
+.subnav[hidden]{display:none}
+.subnav a{flex:none;text-decoration:none;font-size:.82rem;font-weight:600;color:var(--muted);padding:6px 12px;border-radius:999px;border:1px solid transparent}
+.subnav a:hover{color:var(--ink)}
+.subnav a.active{color:var(--ink);background:var(--surface);border-color:var(--line)}
+@media (min-width:720px){.subnav{margin:0 -28px;padding-left:28px;padding-right:28px}}
+
+/* =========================================================
+   ABSCHNITTE & BAUSTEINE
+   ========================================================= */
+.panel[hidden]{display:none}
+section.sec{padding:56px 0;border-top:1px solid var(--line)}
+section.sec:first-of-type{border-top:0}
+.eyebrow{font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.lead{color:var(--muted);font-size:1.05rem;max-width:62ch;margin-top:12px}
+.sec-head{margin-bottom:28px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+.grid{display:grid;gap:14px}
+@media (min-width:720px){.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}}
+@media (min-width:560px) and (max-width:719px){.g4,.g3{grid-template-columns:repeat(2,1fr)}}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted)}
+.note{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:12px;background:var(--surface-2);border:1px solid var(--line);font-size:.93rem;color:var(--muted)}
+.note .ico{color:var(--ink);margin-top:2px}
+.note strong{color:var(--ink)}
+.mt{margin-top:16px}.mt2{margin-top:28px}
+
+/* Hero */
+.hero{padding:44px 0 40px}
+.hero h1{font-size:clamp(2.1rem,6vw,3.6rem);max-width:19ch}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero .lead{font-size:1.12rem}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+
+/* Drei Bausteine */
+.pillar{position:relative;overflow:hidden}
+.pillar .num{font:650 2.6rem/1 var(--font-display);opacity:.18;position:absolute;right:16px;top:12px}
+.pillar .icon-b{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;margin-bottom:14px}
+.pillar h3{font-size:1.25rem}
+.pillar p{color:var(--muted);margin-top:6px;font-size:.95rem}
+.pillar .w{margin-top:14px;font-weight:700;font-size:1.05rem}
+.pillar .w small{font-weight:500;color:var(--muted);font-size:.8rem}
+.c-gold .icon-b{background:var(--gold-soft);color:var(--gold)} .c-gold .w{color:var(--gold)}
+.c-acc .icon-b{background:var(--accent-soft);color:var(--accent)} .c-acc .w{color:var(--accent)}
+.c-teal .icon-b{background:var(--teal-soft);color:var(--teal)} .c-teal .w{color:var(--teal)}
+
+/* Gewichtungs-Spannen */
+.ranges{margin-top:6px}
+.range-row{display:grid;grid-template-columns:110px 1fr 70px;align-items:center;gap:12px;padding:8px 0}
+.range-row .lbl{font-weight:600;font-size:.9rem}
+.range-row .val{font-weight:700;font-size:.9rem;text-align:right;font-variant-numeric:tabular-nums}
+.track{position:relative;height:12px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line)}
+.track span{position:absolute;top:-1px;bottom:-1px;border-radius:99px}
+.axis{display:grid;grid-template-columns:110px 1fr 70px;gap:12px;font-size:.72rem;color:var(--muted)}
+.axis div{display:flex;justify-content:space-between}
+@media (max-width:480px){.range-row,.axis{grid-template-columns:92px 1fr 62px;gap:8px}.range-row .lbl,.range-row .val{font-size:.8rem}}
+.range-row .val{white-space:nowrap}
+@media (max-width:520px){.brand-txt{display:none}}
+
+/* Zeitstrahl */
+.timeline{list-style:none;padding:0;margin:0;position:relative}
+.timeline::before{content:"";position:absolute;left:19px;top:8px;bottom:8px;width:2px;background:var(--line)}
+.step{position:relative;padding-left:56px;margin:0}
+.step+.step{margin-top:14px}
+.dot{position:absolute;left:6px;top:18px;width:28px;height:28px;border-radius:50%;background:var(--surface);border:2px solid var(--line);display:grid;place-items:center;font:700 .78rem/1 var(--font);color:var(--muted)}
+.step.now .dot{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 0 6px var(--accent-soft)}
+.step .card{padding:16px 18px}
+.step .when{font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.now-badge{display:none;background:var(--accent);color:#fff;border-radius:99px;padding:2px 8px;font-size:.68rem;letter-spacing:.08em}
+.step.now .now-badge{display:inline-block}
+.step h3{margin-top:4px}
+.step p{color:var(--muted);margin-top:4px;font-size:.95rem}
+.todo{margin-top:10px;display:flex;gap:8px;align-items:flex-start;font-size:.92rem;background:var(--surface-2);border-radius:10px;padding:10px 12px}
+.todo b{color:var(--accent);white-space:nowrap}
+
+/* Format-Kacheln */
+.formats{display:grid;gap:10px;grid-template-columns:repeat(2,1fr)}
+@media (min-width:720px){.formats{grid-template-columns:repeat(4,1fr)}}
+.fmt{display:flex;flex-direction:column;gap:10px;padding:16px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
+.fmt .ico{width:26px;height:26px;color:var(--accent)}
+.fmt b{font-size:.95rem;line-height:1.3}
+.fmt span{font-size:.8rem;color:var(--muted);line-height:1.4}
+
+/* Do / Don't */
+.dd h3{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.dd ul{list-style:none;padding:0}
+.dd li{display:flex;gap:10px;align-items:flex-start;font-size:.95rem}
+.dd li .ico{margin-top:3px}
+.dd.do h3,.dd.do li .ico{color:var(--ok)}
+.dd.dont h3,.dd.dont li .ico{color:var(--no)}
+
+/* Handout-Anatomie */
+.anat{display:grid;gap:22px;align-items:start}
+@media (min-width:820px){.anat{grid-template-columns:300px 1fr;gap:36px}}
+.paper{aspect-ratio:1/1.414;background:var(--surface);border:1px solid var(--line);border-radius:6px;box-shadow:var(--shadow);padding:18px 18px;display:flex;flex-direction:column;gap:8px;max-width:300px;margin:0 auto;width:100%}
+.pblk{border-radius:5px;padding:6px 8px;font-size:.68rem;font-weight:700;display:flex;gap:6px;align-items:center;color:var(--ink)}
+.pblk i{font-style:normal;width:16px;height:16px;border-radius:50%;display:grid;place-items:center;font-size:.6rem;background:var(--ink);color:var(--bg);flex:none}
+.pblk.h{background:var(--gold-soft)}
+.pblk.q{background:var(--accent-soft)}
+.pblk.k{background:var(--surface-2);border:1px dashed var(--line);flex:1;flex-direction:column;align-items:stretch;gap:5px}
+.pblk.k .ln{height:5px;border-radius:3px;background:var(--line)}
+.pblk.k .ln.s{width:70%}
+.pblk.f{background:var(--teal-soft)}
+.pblk.g{background:var(--surface-2);border:1px dashed var(--line);font-weight:500;color:var(--muted)}
+.pblk.src{background:var(--surface-2);border:1px solid var(--line)}
+.parts{list-style:none;padding:0;counter-reset:p;display:grid;gap:10px}
+.parts li{margin:0;display:grid;grid-template-columns:30px 1fr;gap:12px;align-items:start}
+.parts .n{width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-weight:700;font-size:.85rem}
+.parts b{display:block}
+.parts span{color:var(--muted);font-size:.93rem}
+.rules{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.rules .pill{background:var(--gold-soft);color:var(--ink);border-color:transparent;font-size:.82rem}
+
+/* Quellen */
+.seg{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.seg button{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--muted);font:600 .85rem/1 var(--font);padding:9px 14px;border-radius:999px;cursor:pointer}
+.seg button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.schema{font:500 .9rem/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;position:relative;word-break:break-word}
+.schema .k{color:var(--accent);font-weight:700}
+.example{margin-top:10px;font-size:.92rem;color:var(--muted);padding-left:14px;border-left:3px solid var(--line)}
+.copy{position:absolute;top:8px;right:8px;appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:8px;padding:5px 8px;font:600 .72rem/1 var(--font);cursor:pointer;display:flex;gap:5px;align-items:center}
+.copy .ico{width:14px;height:14px}
+.schema-wrap .schema{padding-right:84px}
+.quote{font-family:var(--font-display);font-size:1.05rem;font-style:italic}
+.minirules{list-style:none;padding:0;display:grid;gap:8px;font-size:.93rem}
+.minirules li{margin:0;display:flex;gap:10px}
+.minirules li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);flex:none;margin-top:.6em}
+
+/* Kolloquium */
+.kq .tag{width:36px;height:36px;border-radius:10px;background:var(--teal-soft);color:var(--teal);display:grid;place-items:center;font:700 1rem/1 var(--font-display);margin-bottom:12px}
+.kq h3{font-size:1.05rem}
+.kq .goal{font-size:.85rem;color:var(--muted);margin-top:4px}
+.kq ul{list-style:none;padding:0;margin-top:12px;display:grid;gap:8px}
+.kq li{margin:0;font-size:.9rem;padding:8px 10px;border-radius:8px;background:var(--surface-2)}
+.k-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.k-meta .pill{background:var(--teal-soft);color:var(--teal);border-color:transparent}
+
+/* KI */
+.ki-col{border-top:4px solid}
+.ki-col.ok{border-top-color:var(--ok)}
+.ki-col.no{border-top-color:var(--no)}
+.ki-col h3{display:flex;gap:8px;align-items:center;margin-bottom:12px}
+.ki-col.ok h3{color:var(--ok)} .ki-col.no h3{color:var(--no)}
+.ki-col ul{list-style:none;padding:0;display:grid;gap:10px}
+.ki-col li{margin:0;display:flex;gap:10px;font-size:.95rem}
+.ki-col li .ico{margin-top:3px}
+.ki-col.ok li .ico{color:var(--ok)} .ki-col.no li .ico{color:var(--no)}
+.banner{display:flex;gap:14px;align-items:flex-start;border-radius:var(--radius);padding:18px 20px;background:var(--ink);color:var(--bg)}
+.banner .ico{width:24px;height:24px;color:var(--gold-fill);margin-top:2px}
+.banner p{opacity:.85;margin-top:4px;font-size:.95rem}
+
+/* Bewertung */
+.scale{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
+.scale div{text-align:center;padding:10px 4px;border-radius:10px;background:var(--surface-2);border:1px solid var(--line);font-size:.75rem;color:var(--muted);line-height:1.3}
+.scale b{display:block;font:650 1.4rem/1 var(--font-display);color:var(--ink);margin-bottom:4px}
+.warn{display:flex;gap:14px;align-items:flex-start;padding:18px 20px;border-radius:var(--radius);background:var(--no-soft);border:1px solid color-mix(in srgb,var(--no) 30%,transparent)}
+.warn .ico{color:var(--no);width:24px;height:24px}
+.warn ol{margin:8px 0 0;padding-left:1.2em;font-size:.95rem}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:10px;font-size:.88rem;font-weight:600}
+.flow span{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+.flow span.bad{background:var(--no);color:#fff;border-color:var(--no)}
+.flow i{font-style:normal;color:var(--muted)}
+
+/* Aufklappbare Abschnitte */
+details.acc{background:var(--surface);border:1px solid var(--line);border-radius:14px}
+details.acc+details.acc{margin-top:10px}
+details.acc>summary{list-style:none;cursor:pointer;padding:15px 18px;font-weight:600;display:flex;align-items:center;gap:12px;justify-content:space-between}
+details.acc>summary::-webkit-details-marker{display:none}
+details.acc>summary::after{content:"";width:10px;height:10px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .2s;flex:none;margin-top:-4px}
+details.acc[open]>summary::after{transform:rotate(-135deg);margin-top:4px}
+details.acc .body{padding:0 18px 18px;font-size:.94rem}
+details.acc .body ul li{color:var(--ink)}
+.crit{list-style:none;padding:0;display:grid;gap:6px}
+.crit li{margin:0;padding:8px 12px;border-radius:8px;background:var(--surface-2);font-size:.9rem}
+.crit li.fs{background:var(--gold-soft)}
+.crit-h{font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:14px 0 8px}
+.crit-h:first-child{margin-top:0}
+
+/* Checkliste */
+.cl-top{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:18px}
+.ring{width:72px;height:72px;flex:none;position:relative}
+.ring svg{width:72px;height:72px;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:8}
+.ring .bg{stroke:var(--line)}
+.ring .fg{stroke:var(--ok);stroke-linecap:round;transition:stroke-dashoffset .4s}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:.95rem}
+.cl-group h3{font-size:.95rem;margin-bottom:10px;display:flex;justify-content:space-between;gap:8px}
+.cl-group h3 small{color:var(--muted);font-weight:600}
+.chk{display:flex;gap:12px;align-items:flex-start;padding:9px 10px;border-radius:10px;cursor:pointer;font-size:.93rem}
+.chk:hover{background:var(--surface-2)}
+.chk input{appearance:none;width:22px;height:22px;border:2px solid var(--line);border-radius:7px;flex:none;margin:0;display:grid;place-items:center;cursor:pointer;background:var(--surface)}
+.chk input:checked{background:var(--ok);border-color:var(--ok)}
+.chk input:checked::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.chk input:checked+span{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--line)}
+.btn{appearance:none;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 .85rem/1 var(--font);padding:10px 14px;border-radius:10px;cursor:pointer;text-decoration:none}
+.btn:hover{border-color:var(--muted)}
+
+/* Downloads */
+.dl{display:flex;gap:14px;align-items:center;padding:14px 16px}
+.dl .fi{width:42px;height:42px;border-radius:10px;background:var(--surface-2);border:1px solid var(--line);display:grid;place-items:center;flex:none;color:var(--muted)}
+.dl .t{flex:1;min-width:0}
+.dl .t b{display:block;font-size:.95rem;line-height:1.3}
+.dl .t span{font-size:.8rem;color:var(--muted)}
+.dl .links{display:flex;gap:6px;flex:none}
+.badge{display:inline-flex;align-items:center;gap:4px;text-decoration:none;font:700 .72rem/1 var(--font);letter-spacing:.04em;padding:7px 9px;border-radius:8px;border:1px solid var(--line)}
+.badge.pdf{color:var(--no);background:var(--no-soft);border-color:transparent}
+.badge.docx{color:#2b5bb5;background:#e3ecfb;border-color:transparent}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .badge.docx{color:#9dbdff;background:#1d2a44}}
+:root[data-theme="dark"] .badge.docx{color:#9dbdff;background:#1d2a44}
+.badge:hover{filter:brightness(.95)}
+.dl-group{font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:22px 0 10px}
+
+/* Tabellen (werden mobil zu Karten) */
+.tbl{width:100%;border-collapse:separate;border-spacing:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;font-size:.92rem}
+.tbl th,.tbl td{text-align:left;vertical-align:top;padding:14px 16px;border-bottom:1px solid var(--line)}
+.tbl tr:last-child td{border-bottom:0}
+.tbl th{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+.tbl td:first-child{font-weight:700;white-space:nowrap}
+.tbl ul{padding-left:1.1em}
+.tbl .who{display:inline-block;font-size:.75rem;font-weight:700;padding:3px 8px;border-radius:6px;background:var(--teal-soft);color:var(--teal)}
+@media (max-width:760px){
+  .tbl,.tbl tbody,.tbl tr,.tbl td{display:block;width:100%}
+  .tbl thead{display:none}
+  .tbl{background:transparent;border:0;border-radius:0}
+  .tbl tr{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-bottom:10px;padding:6px 0}
+  .tbl td{border:0;padding:6px 16px}
+  .tbl td:first-child{white-space:normal;font-size:1rem;padding-top:12px}
+  .tbl td[data-l]::before{content:attr(data-l);display:block;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+}
+
+/* Lehrkräfte-Reiter: etwas dichter */
+#p-lehrkraefte section.sec{padding:44px 0}
+#p-lehrkraefte .hero h1{max-width:24ch;font-size:clamp(1.9rem,5vw,3rem)}
+.hist{list-style:none;padding:0;display:grid;gap:10px}
+.hist li{margin:0;display:grid;grid-template-columns:96px 1fr;gap:12px;font-size:.93rem}
+.hist b{font-variant-numeric:tabular-nums}
+.hist li.cur b{color:var(--accent)}
+.path{font:500 .85rem/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--surface-2);border-radius:8px;padding:8px 10px;margin-top:6px;word-break:break-word}
+.kv{display:grid;gap:12px}
+.kv>div{display:grid;gap:2px}
+.kv dt{font-weight:700;font-size:.92rem}
+.kv dd{margin:0}
+
+/* Fußzeile */
+footer{border-top:1px solid var(--line);padding:28px 0 40px;color:var(--muted);font-size:.85rem}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center}
+.theme-btn{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:7px 12px;font:600 .8rem/1 var(--font);cursor:pointer}
+
+/* Einblend-Animation */
+@media (prefers-reduced-motion:no-preference){
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+}
+
+/* Druck */
+@media print{
+  header.top,.subnav,footer .theme-btn,.copy,.cl-actions,.skip{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  .card,.tbl,details.acc{box-shadow:none;break-inside:avoid}
+  section.sec{padding:18px 0}
+  .reveal{opacity:1!important;transform:none!important}
+  .banner{background:#fff;color:#000;border:1px solid #999}
+  a.badge::after{content:" (" attr(href) ")";font-weight:400}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Zum Inhalt springen</a>
+
+<!-- ======= ICON-SPRITE ======= -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></symbol>
+  <symbol id="i-pres" viewBox="0 0 24 24"><path d="M2 3h20M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3M7 21l5-5 5 5"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="i-dl" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4M12 17h.01"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9zM19 17l.8 2.2L22 20l-2.2.8L19 23l-.8-2.2L16 20l2.2-.8z"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></symbol>
+  <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36z"/></symbol>
+  <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L4 20a1 1 0 0 0 .9 1.5h14.2A1 1 0 0 0 20 20l-6-11V3"/><path d="M7 15h10"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="m3 8 9 5 9-5M12 13v8"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></symbol>
+  <symbol id="i-cap" viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+  <symbol id="i-sheet" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></symbol>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <div class="bar">
+      <a class="brand" href="#schueler" aria-label="GFS Eingangsklasse – Startseite">
+        <span class="brand-mark">GFS</span>
+        <span class="brand-txt">GFS in der Eingangsklasse<small>Berufliches Gymnasium · ab SJ 2026/27</small></span>
+      </a>
+      <div class="tabs" role="tablist" aria-label="Zielgruppe wählen">
+        <button class="tab" role="tab" id="t-schueler" aria-controls="p-schueler" aria-selected="true" data-tab="schueler"><span class="long">Für Schüler:innen</span><span class="short">Schüler:innen</span></button>
+        <button class="tab" role="tab" id="t-lehrkraefte" aria-controls="p-lehrkraefte" aria-selected="false" tabindex="-1" data-tab="lehrkraefte"><span class="long">Für Lehrkräfte</span><span class="short">Lehrkräfte</span></button>
+      </div>
+    </div>
+    <nav class="subnav" id="nav-schueler" aria-label="Abschnitte für Schüler:innen">
+      <a href="#s-start">Überblick</a><a href="#s-fahrplan">Fahrplan</a><a href="#s-format">Format</a><a href="#s-handout">Handout</a><a href="#s-quellen">Zitieren</a><a href="#s-kolloquium">Kolloquium</a><a href="#s-ki">KI</a><a href="#s-bewertung">Bewertung</a><a href="#s-checkliste">Checkliste</a><a href="#s-downloads">Downloads</a><a href="#s-faq">FAQ</a>
+    </nav>
+    <nav class="subnav" id="nav-lehrkraefte" aria-label="Abschnitte für Lehrkräfte" hidden>
+      <a href="#l-start">Überblick</a><a href="#l-terminplan">Terminplan</a><a href="#l-betreuung">Betreuung</a><a href="#l-kolloquium">Kolloquium</a><a href="#l-bewertung">Bewertungsbogen</a><a href="#l-ablage">Ablageorte</a><a href="#l-downloads">Downloads</a><a href="#l-js">Ausblick J1/J2</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- =========================================================
+     REITER 1: SCHÜLER:INNEN
+     ========================================================= -->
+<div class="panel" id="p-schueler" role="tabpanel" aria-labelledby="t-schueler">
+<div class="wrap">
+
+  <!-- ÜBERBLICK -->
+  <section class="sec hero" id="s-start">
+    <p class="eyebrow">Eingangsklasse · Klasse 11</p>
+    <h1>Deine <em>GFS</em> – Schritt für Schritt.</h1>
+    <p class="lead">GFS heißt <strong>Gleichwertige Feststellung von Schülerleistungen</strong>. Du erarbeitest selbstständig ein Thema in einem Fach deiner Wahl und zeigst, was du kannst. Die GFS zählt wie eine <strong>zusätzliche Klassenarbeit</strong> in diesem Fach. Eine Klassenarbeit ersetzen kann sie aber nicht.</p>
+    <div class="facts">
+      <span class="pill"><svg class="ico"><use href="#i-check"/></svg>1 GFS pro Schüler:in</span>
+      <span class="pill"><svg class="ico"><use href="#i-clock"/></svg>Termin im 2. Halbjahr</span>
+      <span class="pill"><svg class="ico"><use href="#i-cap"/></svg>Übung für J1 &amp; J2</span>
+    </div>
+
+    <div class="grid g3 mt2">
+      <article class="card pillar c-gold reveal">
+        <span class="num">1</span>
+        <div class="icon-b"><svg class="ico"><use href="#i-doc"/></svg></div>
+        <h3>Handout</h3>
+        <p>Dein kompakter schriftlicher Begleiter: 1–2 Seiten mit Fragestellung, Kernaussagen, Fazit und Quellen.</p>
+        <p class="w">5–20 % <small>der Note</small></p>
+      </article>
+      <article class="card pillar c-acc reveal">
+        <span class="num">2</span>
+        <div class="icon-b"><svg class="ico"><use href="#i-pres"/></svg></div>
+        <h3>Durchführung</h3>
+        <p>Deine GFS in einem Format, das zu Thema und Fach passt, zum Beispiel ein Vortrag, eine Führung oder ein Experiment.</p>
+        <p class="w">40–60 % <small>der Note</small></p>
+      </article>
+      <article class="card pillar c-teal reveal">
+        <span class="num">3</span>
+        <div class="icon-b"><svg class="ico"><use href="#i-chat"/></svg></div>
+        <h3>Kolloquium</h3>
+        <p>Ein Gespräch von ca. 10–12 Minuten mit deiner Fachlehrkraft über Inhalt, Vorgehen, Quellen und KI-Nutzung.</p>
+        <p class="w">35–40 % <small>der Note</small></p>
+      </article>
+    </div>
+
+    <div class="card mt reveal">
+      <h3 style="margin-bottom:8px">So viel zählt jeder Teil</h3>
+      <div class="ranges" role="img" aria-label="Gewichtungsspannen: Handout 5 bis 20 Prozent, Durchführung 40 bis 60 Prozent, Kolloquium 35 bis 40 Prozent">
+        <div class="range-row"><span class="lbl">Handout</span><div class="track"><span style="left:8.33%;width:25%;background:var(--gold-fill)"></span></div><span class="val">5–20 %</span></div>
+        <div class="range-row"><span class="lbl">Durchführung</span><div class="track"><span style="left:66.67%;width:33.33%;background:var(--accent)"></span></div><span class="val">40–60 %</span></div>
+        <div class="range-row"><span class="lbl">Kolloquium</span><div class="track"><span style="left:58.33%;width:8.33%;background:var(--teal)"></span></div><span class="val">35–40 %</span></div>
+        <div class="axis"><span></span><div><span>0 %</span><span>20 %</span><span>40 %</span><span>60 %</span></div><span></span></div>
+      </div>
+      <p class="note mt"><svg class="ico"><use href="#i-info"/></svg><span>Die <strong>genaue Gewichtung legt deine Fachlehrkraft fest</strong>. Du erfährst sie spätestens bei der Themenabsprache. Zusammen ergeben die drei Teile immer 100 %.</span></p>
+    </div>
+  </section>
+
+  <!-- FAHRPLAN -->
+  <section class="sec" id="s-fahrplan">
+    <div class="sec-head">
+      <p class="eyebrow">Fahrplan</p>
+      <h2>Was passiert wann?</h2>
+      <p class="lead">Der Weg zur GFS dauert ein ganzes Schuljahr. Der markierte Punkt zeigt ungefähr, wo ihr gerade steht.</p>
+    </div>
+    <ol class="timeline" id="timeline">
+      <li class="step reveal" data-phase="0">
+        <span class="dot">1</span>
+        <div class="card">
+          <p class="when">Vor den Herbstferien <span class="now-badge">Jetzt</span></p>
+          <h3>Grobthemen kennenlernen</h3>
+          <p>Deine Klassenlehrkraft (KL) stellt euch eine Tabelle mit Grobthemen vor, die die Fachlehrkräfte vorbereitet haben. Du findest sie auf IServ.</p>
+          <div class="todo"><b>Du:</b><span>Themen anschauen und überlegen, welches Fach und welches Thema dich interessieren.</span></div>
+        </div>
+      </li>
+      <li class="step reveal" data-phase="1">
+        <span class="dot">2</span>
+        <div class="card">
+          <p class="when">Bis zu den Weihnachtsferien <span class="now-badge">Jetzt</span></p>
+          <h3>Fach wählen und anmelden</h3>
+          <p>Jede Fachlehrkraft (FL) betreut höchstens <strong>3 Schüler:innen pro Klasse</strong>. Wer sich zuerst meldet, bekommt den Platz. Wer sich nicht meldet, bekommt von der KL ein Fach zugeteilt.</p>
+          <div class="todo"><b>Du:</b><span>Die FL direkt ansprechen (in der Schule, per E-Mail oder über IServ) und dich in die Tabelle eintragen. Am besten früh.</span></div>
+        </div>
+      </li>
+      <li class="step reveal" data-phase="2">
+        <span class="dot">3</span>
+        <div class="card">
+          <p class="when">Ab Januar <span class="now-badge">Jetzt</span></p>
+          <h3>IF-Stunde: das GFS-Handwerkszeug</h3>
+          <p>In der wöchentlichen IF-Stunde lernst du Themenfindung, Recherche, Handout, Zitieren, Umgang mit KI, Präsentieren und die Vorbereitung aufs Kolloquium. Die Materialien liegen danach auf IServ.</p>
+          <div class="todo"><b>Du:</b><span>Mitarbeiten, an deinem eigenen Thema arbeiten und die Schulbücherei nutzen.</span></div>
+        </div>
+      </li>
+      <li class="step reveal" data-phase="3">
+        <span class="dot">4</span>
+        <div class="card">
+          <p class="when">Erste Februarwoche <span class="now-badge">Jetzt</span></p>
+          <h3>GFS-Workshoptag</h3>
+          <p>Deine FL betreut dich von der 1. bis zur 4. Stunde intensiv. Ihr klärt das konkrete Thema, die Fragestellung, das Format, die ersten Rechercheschritte und die Gliederung des Handouts.</p>
+          <div class="todo"><b>Du:</b><span>Ideen mitbringen und dir vorher schon ein paar Quellen anschauen.</span></div>
+        </div>
+      </li>
+      <li class="step reveal" data-phase="4">
+        <span class="dot">5</span>
+        <div class="card">
+          <p class="when">2. Schulhalbjahr <span class="now-badge">Jetzt</span></p>
+          <h3>Ausarbeiten, präsentieren, Kolloquium</h3>
+          <p>Deine FL legt die Termine für die Abgabe des Handouts und die Durchführung fest. Das Kolloquium findet direkt danach oder kurz danach statt. Bei Fragen erreichst du deine FL per E-Mail oder zu vereinbarten Terminen.</p>
+          <div class="todo"><b>Du:</b><span>Handout spätestens zu Beginn der Präsentation abgeben, Vortrag mehrmals üben und alle Termine einhalten.</span></div>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- FORMAT & AUFTRITT -->
+  <section class="sec" id="s-format">
+    <div class="sec-head">
+      <p class="eyebrow">Format</p>
+      <h2>Wie willst du deine GFS zeigen?</h2>
+      <p class="lead">Du bist nicht auf einen Vortrag festgelegt. Welche Formate in deinem Fach möglich sind, besprichst du bei der Themenabsprache mit deiner FL.</p>
+    </div>
+    <div class="formats">
+      <div class="fmt reveal"><svg class="ico"><use href="#i-pres"/></svg><b>Vortrag mit Präsentation</b><span>z. B. PowerPoint, Prezi</span></div>
+      <div class="fmt reveal"><svg class="ico"><use href="#i-compass"/></svg><b>Führung</b><span>Ausstellung, Museum, Betrieb</span></div>
+      <div class="fmt reveal"><svg class="ico"><use href="#i-users"/></svg><b>Veranstaltung</b><span>Theaterbesuch, Lesung, Exkursion</span></div>
+      <div class="fmt reveal"><svg class="ico"><use href="#i-flask"/></svg><b>Experiment</b><span>mit Auswertung und Präsentation der Ergebnisse</span></div>
+      <div class="fmt reveal"><svg class="ico"><use href="#i-box"/></svg><b>Projekt</b><span>Produkt, Kampagne, Ausstellung</span></div>
+      <div class="fmt reveal"><svg class="ico"><use href="#i-pen"/></svg><b>Schriftliche Ausarbeitung</b><span>mit der digitalen Formatvorlage</span></div>
+      <div class="fmt reveal"><svg class="ico"><use href="#i-cap"/></svg><b>Unterrichtsstunde</b><span>selbst eine Stunde gestalten</span></div>
+      <div class="fmt reveal"><svg class="ico"><use href="#i-plus"/></svg><b>… und mehr</b><span>nach Absprache mit der FL</span></div>
+    </div>
+
+    <div class="grid g2 mt2">
+      <div class="card dd do reveal">
+        <h3><svg class="ico"><use href="#i-check"/></svg>So gelingt dein Auftritt</h3>
+        <ul>
+          <li><svg class="ico"><use href="#i-check"/></svg><span>Frei sprechen: Kernaussagen merken, keinen auswendig gelernten Text.</span></li>
+          <li><svg class="ico"><use href="#i-check"/></svg><span>Mehrmals üben, am besten vor Freund:innen oder der Familie.</span></li>
+          <li><svg class="ico"><use href="#i-check"/></svg><span>Blickkontakt mit dem Publikum halten.</span></li>
+          <li><svg class="ico"><use href="#i-check"/></svg><span>Bei anderen Formaten alles Organisatorische vorher mit der FL klären und alle Beteiligten rechtzeitig informieren.</span></li>
+          <li><svg class="ico"><use href="#i-check"/></svg><span>Einen strukturierten Ablauf planen und dich daran halten.</span></li>
+        </ul>
+      </div>
+      <div class="card dd dont reveal">
+        <h3><svg class="ico"><use href="#i-x"/></svg>Das lieber nicht</h3>
+        <ul>
+          <li><svg class="ico"><use href="#i-x"/></svg><span>Die Folien als Manuskript benutzen und ablesen. Die Präsentation ist nur eine Stütze.</span></li>
+          <li><svg class="ico"><use href="#i-x"/></svg><span>Die Zeit ignorieren: Zu kurz ist genauso problematisch wie zu lang.</span></li>
+          <li><svg class="ico"><use href="#i-x"/></svg><span>Entscheidungen treffen, die du im Kolloquium nicht erklären kannst.</span></li>
+          <li><svg class="ico"><use href="#i-x"/></svg><span>Den Vortrag zum ersten Mal vor der Klasse halten.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- HANDOUT -->
+  <section class="sec" id="s-handout">
+    <div class="sec-head">
+      <p class="eyebrow">Handout</p>
+      <h2>Dein Handout auf einen Blick</h2>
+      <p class="lead">Mit dem Handout kann dein Publikum und deine FL deiner GFS folgen und sich Fragen fürs Kolloquium notieren.</p>
+    </div>
+    <div class="anat">
+      <div class="paper reveal" aria-hidden="true">
+        <div class="pblk h"><i>1</i>Kopfdaten</div>
+        <div class="pblk q"><i>2</i>Fragestellung &amp; Einleitung</div>
+        <div class="pblk k"><span style="display:flex;gap:6px;align-items:center"><i>3</i>Kernaussagen je Gliederungspunkt</span><span class="ln"></span><span class="ln s"></span><span class="ln"></span><span class="ln s"></span><span class="ln"></span><span class="ln s"></span></div>
+        <div class="pblk f"><i>4</i>Fazit</div>
+        <div class="pblk g"><i>5</i>Glossar (optional)</div>
+        <div class="pblk src"><i>6</i>Quellenverzeichnis</div>
+      </div>
+      <div>
+        <ol class="parts">
+          <li><span class="n">1</span><div><b>Kopfdaten</b><span>Name, Klasse, Fach, Fachlehrkraft, Datum der Präsentation, Thema</span></div></li>
+          <li><span class="n">2</span><div><b>Fragestellung / Einleitung</b><span>2–4 Sätze: Worum geht es, welche Frage beantwortest du und warum ist das Thema relevant?</span></div></li>
+          <li><span class="n">3</span><div><b>Kernaussagen</b><span>Pro Gliederungspunkt 1–3 Kernaussagen als vollständige Sätze, kein „Stichwortsalat“. Jede Quelle aus dem Verzeichnis wird mindestens einmal zitiert.</span></div></li>
+          <li><span class="n">4</span><div><b>Fazit</b><span>2–4 Sätze: Beantworte deine Eingangsfrage. Was ist dein Ergebnis?</span></div></li>
+          <li><span class="n">5</span><div><b>Glossar</b> <span>(optional) für Fachbegriffe, die man zum Verstehen braucht</span></div></li>
+          <li><span class="n">6</span><div><b>Quellenverzeichnis</b><span>Mindestens 3 seriöse Quellen, davon mindestens 1 Printquelle, alphabetisch sortiert und korrekt bibliografiert</span></div></li>
+        </ol>
+        <!-- PRÜFEN: Leitfaden SuS nennt „1–2 Seiten“, Prozessbeschreibung LuL „erweitertes Handout auf 2 Seiten“. Hier: 1–2 Seiten.
+             „Mind. 1 Print-Quelle“ steht nur im Merkblatt GFS-Handout, nicht im Leitfaden. -->
+        <div class="rules">
+          <span class="pill">DIN A4 · 1–2 Seiten</span>
+          <span class="pill">Schrift mind. 10 pt</span>
+          <span class="pill">≥ 3 Quellen, ≥ 1 davon gedruckt</span>
+          <span class="pill">Abgabe: spätestens zu Beginn der Präsentation</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ZITIEREN & BIBLIOGRAFIEREN -->
+  <section class="sec" id="s-quellen">
+    <div class="sec-head">
+      <p class="eyebrow">Quellen</p>
+      <h2>Richtig zitieren &amp; bibliografieren</h2>
+      <p class="lead">Wenn du Quellen sauber angibst, schützt du dich vor dem Vorwurf des Plagiats und zeigst, wie gründlich du gearbeitet hast.</p>
+    </div>
+
+    <div class="grid g2">
+      <div class="card reveal">
+        <h3>Direktes Zitat</h3>
+        <p class="goal" style="color:var(--muted);font-size:.9rem;margin-top:4px">wörtlich übernommen · so sparsam wie möglich</p>
+        <p class="quote mt">„Ich bin ein Berliner“ (Kennedy, 1963).</p>
+        <ul class="minirules mt">
+          <li>Steht in Anführungszeichen, direkt danach folgt der Beleg.</li>
+          <li>Auslassungen werden mit […] gekennzeichnet, Ergänzungen stehen in [eckigen Klammern].</li>
+          <li>Fehler im Original übernimmst du und markierst sie mit [sic!].</li>
+        </ul>
+      </div>
+      <div class="card reveal">
+        <h3>Indirektes Zitat</h3>
+        <p class="goal" style="color:var(--muted);font-size:.9rem;margin-top:4px">sinngemäß in eigenen Worten · so oft wie möglich</p>
+        <p class="quote mt">Kennedy bezeichnete sich in seiner Rede selbst als Berliner (vgl. Kennedy, 1963).</p>
+        <ul class="minirules mt">
+          <li>Ohne Anführungszeichen.</li>
+          <li>Beleg mit „vgl.“: (vgl. Autor, Jahr: Seite).</li>
+          <li>Keine Jahreszahl vorhanden? Dann schreibst du (o.J.) für „ohne Jahr“.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note mt reveal"><svg class="ico"><use href="#i-info"/></svg><span><strong>Zwei Belegsysteme:</strong> Beim Harvard-Stil steht die Quelle in Klammern direkt im Text, bei Fußnoten steht sie unten auf der Seite. Welches System du verwendest, sprichst du mit deiner FL ab. Bleib dann aber durchgehend dabei.</span></p>
+
+    <div class="card mt2 reveal">
+      <h3 style="margin-bottom:14px">Schema fürs Quellenverzeichnis</h3>
+      <div class="seg" role="tablist" aria-label="Quellenart wählen">
+        <button role="tab" aria-selected="true" data-bib="0">Internetquelle</button>
+        <button role="tab" aria-selected="false" data-bib="1">Buch (Monografie)</button>
+        <button role="tab" aria-selected="false" data-bib="2">Sammelband</button>
+        <button role="tab" aria-selected="false" data-bib="3">Zeitschrift</button>
+      </div>
+      <div class="schema-wrap" data-bibpanel="0">
+        <div class="schema"><span class="k">Nachname, Vorname</span> (Erscheinungsjahr): <span class="k">Titel: Untertitel</span>. Verfügbar unter: URL [Zugriff: TT.MM.JJJJ].<button class="copy" type="button"><svg class="ico"><use href="#i-copy"/></svg>Kopieren</button></div>
+        <p class="example">Kultusministerium Baden-Württemberg (2021): Verordnung des Kultusministeriums über die Beruflichen Gymnasien (BGVO). Verfügbar unter: https://www.landesrecht-bw.de [Zugriff: 12.06.2026].</p>
+      </div>
+      <div class="schema-wrap" data-bibpanel="1" hidden>
+        <div class="schema"><span class="k">Nachname, Vorname</span> (Erscheinungsjahr): <span class="k">Titel: Untertitel</span>. Auflage [ab 2. Auflage]. Erscheinungsort: Verlag.<button class="copy" type="button"><svg class="ico"><use href="#i-copy"/></svg>Kopieren</button></div>
+        <p class="example">Rudzio, Wolfgang (2006): Das politische System der Bundesrepublik Deutschland. (7. Auflage). Wiesbaden: VS Verlag für Sozialwissenschaften.</p>
+      </div>
+      <div class="schema-wrap" data-bibpanel="2" hidden>
+        <div class="schema"><span class="k">Nachname, Vorname</span> (Erscheinungsjahr): <span class="k">Titel des Beitrags</span>. In: Nachname, Vorname (Hrsg.): Titel des Sammelbandes: Untertitel. Erscheinungsort: Verlag, S. XX–XX.<button class="copy" type="button"><svg class="ico"><use href="#i-copy"/></svg>Kopieren</button></div>
+        <p class="example">Zohlnhöfer, Reimut (2007): Öffentliche Bildungsausgaben im inter- und intranationalen Vergleich: Machen Parteien einen Unterschied? In: Schmidt, Manfred G. / Ostheim, Tobias / Siegel, Nico A. et al. (Hrsg.): Der Wohlfahrtsstaat. Wiesbaden: VS Verlag für Sozialwissenschaften, S. 372–388.</p>
+      </div>
+      <div class="schema-wrap" data-bibpanel="3" hidden>
+        <div class="schema"><span class="k">Nachname, Vorname</span> (Erscheinungsjahr): <span class="k">Titel des Beitrags</span>. In: Name der Zeitschrift, Jg. X (Heft Y), S. XX–XX.<button class="copy" type="button"><svg class="ico"><use href="#i-copy"/></svg>Kopieren</button></div>
+        <p class="example">Störkel, Frank (2007): Prävention und Gesundheitsförderung – Grundlagen und Konzepte. In: Unterricht Pflege, Jg. 12 (Heft 1), S. 2–8.</p>
+      </div>
+      <!-- PRÜFEN: Das Merkblatt GFS-Handout enthält beim Monografie-Schema einen Tippfehler („Verlag.. Verlagsort: Verlag.“) und ein leicht abweichendes Zeitschriften-Schema. Hier gilt das Merkblatt Bibliografieren. -->
+      <details class="acc mt">
+        <summary>Die wichtigsten Regeln fürs Verzeichnis</summary>
+        <div class="body">
+          <ul class="minirules">
+            <li>Quellen nach Art gruppieren und innerhalb der Gruppe alphabetisch nach Nachnamen sortieren.</li>
+            <li>Höchstens 3 Autor:innen nennen, danach „et al.“ schreiben.</li>
+            <li>Die Auflage gibst du erst ab der 2. Auflage an.</li>
+            <li>Kein Jahr angegeben? Dann schreibst du (o.J.).</li>
+            <li>Gleicher Autor, gleiches Jahr: 2015a, 2015b …</li>
+            <li>Akademische Titel wie Prof. oder Dr. lässt du weg.</li>
+            <li>Jede Angabe endet mit einem Punkt.</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- KOLLOQUIUM -->
+  <section class="sec" id="s-kolloquium">
+    <div class="sec-head">
+      <p class="eyebrow">Kolloquium</p>
+      <h2>Das Gespräch nach deiner GFS</h2>
+      <p class="lead">Im Kolloquium zeigst du, dass du dein Thema wirklich verstanden hast, auch über die Präsentation hinaus. Diese vier Bereiche kommen immer vor:</p>
+    </div>
+    <div class="k-meta">
+      <span class="pill"><svg class="ico"><use href="#i-clock"/></svg>ca. 10–12 Minuten</span>
+      <span class="pill">direkt danach oder zeitnah</span>
+      <span class="pill">im Plenum oder einzeln, das entscheidet die FL</span>
+    </div>
+    <div class="grid g4">
+      <article class="card kq reveal">
+        <div class="tag">A</div>
+        <h3>Inhalt &amp; Fachwissen</h3>
+        <p class="goal">Kannst du dein Thema erklären, verteidigen und einordnen?</p>
+        <ul>
+          <li>Formuliere in zwei Sätzen das zentrale Ergebnis deiner GFS.</li>
+          <li>Welche Gegenargumente gibt es zu deiner These?</li>
+        </ul>
+      </article>
+      <article class="card kq reveal">
+        <div class="tag">B</div>
+        <h3>Vorgehen</h3>
+        <p class="goal">Kannst du deinen Arbeitsprozess reflektieren?</p>
+        <ul>
+          <li>Warum hast du dieses Format gewählt?</li>
+          <li>Welche Schwierigkeit gab es und wie hast du sie gelöst?</li>
+        </ul>
+      </article>
+      <article class="card kq reveal">
+        <div class="tag">C</div>
+        <h3>Recherche &amp; Quellen</h3>
+        <p class="goal">Hast du deine Quellen bewusst gewählt und geprüft?</p>
+        <ul>
+          <li>Warum genau diese Quellen?</li>
+          <li>Wie hast du ihre Zuverlässigkeit eingeschätzt?</li>
+        </ul>
+      </article>
+      <article class="card kq reveal">
+        <div class="tag">D</div>
+        <h3>Nutzung von KI</h3>
+        <p class="goal">Kannst du offen erklären, wie du KI genutzt hast?</p>
+        <ul>
+          <li>Wofür hast du KI genutzt und wie hast du die Ergebnisse überprüft?</li>
+          <li>Welche Teile sind dein eigener Beitrag?</li>
+        </ul>
+      </article>
+    </div>
+    <div class="grid g2 mt">
+      <div class="card reveal">
+        <h3 style="margin-bottom:10px">So bereitest du dich vor</h3>
+        <ul class="minirules">
+          <li>Lies deine Quellen wirklich durch, nicht nur die Zusammenfassungen.</li>
+          <li>Überleg dir, welche Fragen kommen könnten.</li>
+          <li>Übe, deine Kernaussagen mit eigenen Worten zu erklären.</li>
+          <li>Leg dir Antworten zu deinem Arbeitsprozess und zur KI-Nutzung zurecht.</li>
+        </ul>
+      </div>
+      <div class="card reveal" style="background:var(--teal-soft);border-color:transparent">
+        <h3 style="margin-bottom:10px;color:var(--teal)">Du weißt etwas nicht?</h3>
+        <p class="quote">„Das weiß ich nicht genau, ich vermute aber …“</p>
+        <p style="margin-top:10px;font-size:.95rem">Eine ehrliche Antwort ist <strong>immer besser</strong> als eine erfundene.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- KI -->
+  <section class="sec" id="s-ki">
+    <div class="sec-head">
+      <p class="eyebrow">Künstliche Intelligenz</p>
+      <h2>KI ist erlaubt, aber nur als Hilfe</h2>
+      <p class="lead">Tools wie ChatGPT oder Perplexity darfst du unterstützend nutzen. Texte einer KI als deine eigene Leistung abzugeben, ist verboten.</p>
+    </div>
+    <div class="grid g2">
+      <div class="card ki-col ok reveal">
+        <h3><svg class="ico"><use href="#i-check"/></svg>Erlaubt</h3>
+        <ul>
+          <li><svg class="ico"><use href="#i-check"/></svg><span>Mit KI einen ersten Überblick über ein Thema bekommen</span></li>
+          <li><svg class="ico"><use href="#i-check"/></svg><span>KI-Vorschläge als Ausgangspunkt nehmen und selbst weiterarbeiten</span></li>
+          <li><svg class="ico"><use href="#i-check"/></svg><span>Eigene Formulierungen von KI sprachlich prüfen lassen</span></li>
+        </ul>
+      </div>
+      <div class="card ki-col no reveal">
+        <h3><svg class="ico"><use href="#i-x"/></svg>Nicht erlaubt</h3>
+        <ul>
+          <li><svg class="ico"><use href="#i-x"/></svg><span>Das Handout oder Teile davon von KI erstellen lassen und abgeben</span></li>
+          <li><svg class="ico"><use href="#i-x"/></svg><span>Von KI geschriebene Vortragstexte vortragen, als wären sie deine eigenen</span></li>
+          <li><svg class="ico"><use href="#i-x"/></svg><span>Quellen angeben, die du nicht selbst gelesen hast, auch wenn die KI sie empfohlen hat</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="banner mt reveal">
+      <svg class="ico"><use href="#i-spark"/></svg>
+      <div>
+        <strong>Offen damit umgehen</strong>
+        <p>Inhalte, die von einer KI stammen, musst du kennzeichnen und selbst mit seriösen Quellen überprüfen. Im Kolloquium wirst du nach deiner KI-Nutzung gefragt. Das ist keine Fangfrage, und bewertet wird nicht, <em>ob</em> du KI genutzt hast, sondern <em>wie</em> du damit umgegangen bist. Die genauen Regeln legt deine FL mit dir fest.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BEWERTUNG -->
+  <section class="sec" id="s-bewertung">
+    <div class="sec-head">
+      <p class="eyebrow">Bewertung</p>
+      <h2>Worauf achtet deine Lehrkraft?</h2>
+      <p class="lead">Jeder der drei Teile bekommt eine eigene Teilnote. Die Gesamtnote erfährst du, sobald alle drei Teilnoten feststehen.</p>
+    </div>
+    <div class="grid g3">
+      <div class="card pillar c-gold reveal"><div class="icon-b"><svg class="ico"><use href="#i-doc"/></svg></div><h3>Handout</h3><p>Inhalt, Struktur, Quellen und Zitation, Sprache, Formales</p></div>
+      <div class="card pillar c-acc reveal"><div class="icon-b"><svg class="ico"><use href="#i-pres"/></svg></div><h3>Durchführung</h3><p>Inhalt, Vortrag bzw. Durchführung, Sprache, Auftreten</p></div>
+      <div class="card pillar c-teal reveal"><div class="icon-b"><svg class="ico"><use href="#i-chat"/></svg></div><h3>Kolloquium</h3><p>Fachliche Tiefe, Eigenständigkeit, Reflexion über Methoden, Quellen und KI</p></div>
+    </div>
+
+    <div class="grid g2 mt">
+      <div class="card reveal">
+        <h3>So wird jedes Kriterium bewertet</h3>
+        <div class="scale">
+          <div><b>3</b>vollständig erfüllt</div>
+          <div><b>2</b>überwiegend erfüllt</div>
+          <div><b>1</b>teilweise erfüllt</div>
+          <div><b>0</b>nicht / kaum erfüllt</div>
+        </div>
+      </div>
+      <div class="warn reveal">
+        <svg class="ico"><use href="#i-alert"/></svg>
+        <div>
+          <strong>Termine sind verbindlich</strong>
+          <div class="flow"><span>Termin verpasst</span><i>→</i><span>letzter Termin</span><i>→</i><span class="bad">Note 6,0</span></div>
+          <p style="margin-top:8px;font-size:.93rem">Wenn du einen Termin verpasst, bekommst du einen letzten Termin. Hältst du auch den nicht ein, wird die Teilleistung mit 6,0 bewertet.</p>
+        </div>
+      </div>
+    </div>
+
+    <details class="acc mt reveal">
+      <summary>Alle Kriterien aus dem Bewertungsbogen ansehen</summary>
+      <div class="body">
+        <p class="crit-h">Handout</p>
+        <ul class="crit">
+          <li>Fragestellung bzw. Problemorientierung klar erkennbar</li><li>Fachlich korrekt, inhaltlich vollständig, logisch aufgebaut</li><li>Eigenständige Auseinandersetzung, nicht nur nacherzählt</li><li>Schlüssiges Fazit</li><li>Seriöse, passende Quellen (mind. 3), korrekt zitiert und vollständig verzeichnet</li><li>Fachsprache, sprachliche Richtigkeit, formale Vorgaben</li>
+        </ul>
+        <p class="crit-h">Durchführung (für das Format Präsentation)</p>
+        <ul class="crit">
+          <li>Fachlich korrekt, inhaltlich tief, mit klarer Argumentation</li><li>Roter Faden, eigenständig erarbeitet, angemessener Umgang mit Komplexität</li><li>Freier Vortrag, klare Sprache, angemessenes Tempo</li><li>Sinnvoller Medieneinsatz, Zeitrahmen eingehalten</li><li>Sicheres Auftreten, Blickkontakt, Körpersprache, Bezug zum Publikum</li>
+        </ul>
+        <p class="crit-h">Kolloquium</p>
+        <ul class="crit">
+          <li>Fachlich korrekte und tiefe Antworten</li><li>Eigenständigkeit, nichts auswendig Gelerntes</li><li>Reflexion über den eigenen Arbeitsprozess</li><li>Quellenkenntnis und Quellenkritik</li><li>Offener und reflektierter Umgang mit KI</li><li>Souveränität im Gespräch</li>
+        </ul>
+        <p class="note mt"><svg class="ico"><use href="#i-info"/></svg><span><strong>GFS in einer Fremdsprache?</strong> Dann gibt es einen eigenen Bewertungsbogen. Zusätzlich wird deine Sprachkompetenz in der Zielsprache bewertet, also Grammatik, Wortschatz, Aussprache und Flüssigkeit. Bei anderen Formaten als der Präsentation legt die FL die Kriterien fest.</span></p>
+      </div>
+    </details>
+  </section>
+
+  <!-- CHECKLISTE -->
+  <section class="sec" id="s-checkliste">
+    <div class="sec-head">
+      <p class="eyebrow">Checkliste</p>
+      <h2>Bin ich bereit?</h2>
+      <p class="lead">Hak ab, was erledigt ist. Dein Fortschritt wird in diesem Browser gespeichert.</p>
+    </div>
+    <div class="cl-top">
+      <div class="ring" aria-hidden="true">
+        <svg viewBox="0 0 80 80"><circle class="bg" cx="40" cy="40" r="34"/><circle class="fg" id="ring-fg" cx="40" cy="40" r="34" stroke-dasharray="213.6" stroke-dashoffset="213.6"/></svg>
+        <b id="ring-txt">0 %</b>
+      </div>
+      <div>
+        <p style="font-weight:700" id="cl-status" aria-live="polite">0 von 0 erledigt</p>
+        <div class="cl-actions" style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+          <button class="btn" type="button" id="cl-reset">Zurücksetzen</button>
+          <button class="btn" type="button" onclick="window.print()">Drucken</button>
+        </div>
+      </div>
+    </div>
+    <div class="grid g2" id="checklist">
+      <div class="card cl-group">
+        <h3>Vor dem Workshoptag <small></small></h3>
+        <label class="chk"><input type="checkbox" data-id="w1"><span>GFS-Fach gewählt und bei der FL angemeldet</span></label>
+        <label class="chk"><input type="checkbox" data-id="w2"><span>Grobthema bekannt, erste eigene Ideen zum konkreten Thema</span></label>
+        <label class="chk"><input type="checkbox" data-id="w3"><span>Erste Quellen angeschaut</span></label>
+      </div>
+      <div class="card cl-group">
+        <h3>Vor der Abgabe des Handouts <small></small></h3>
+        <label class="chk"><input type="checkbox" data-id="h1"><span>Titel bzw. Fragestellung klar formuliert</span></label>
+        <label class="chk"><input type="checkbox" data-id="h2"><span>Kopfdaten, Einleitung, Kernaussagen (ganze Sätze), Fazit und Quellenverzeichnis vorhanden</span></label>
+        <label class="chk"><input type="checkbox" data-id="h3"><span>Das Fazit beantwortet die Eingangsfrage</span></label>
+        <label class="chk"><input type="checkbox" data-id="h4"><span>Mindestens 3 seriöse Quellen korrekt zitiert</span></label>
+        <label class="chk"><input type="checkbox" data-id="h5"><span>Höchstens 2 Seiten DIN A4, Schrift mindestens 10 pt</span></label>
+        <label class="chk"><input type="checkbox" data-id="h6"><span>KI-Nutzung (falls vorhanden) dokumentiert</span></label>
+      </div>
+      <div class="card cl-group">
+        <h3>Vor der Präsentation <small></small></h3>
+        <label class="chk"><input type="checkbox" data-id="p1"><span>Vortrag mehrmals geübt (frei, nicht vom Blatt)</span></label>
+        <label class="chk"><input type="checkbox" data-id="p2"><span>Zeit gestoppt und Rahmen eingehalten</span></label>
+        <label class="chk"><input type="checkbox" data-id="p3"><span>Handout rechtzeitig abgegeben</span></label>
+      </div>
+      <div class="card cl-group">
+        <h3>Vor dem Kolloquium <small></small></h3>
+        <label class="chk"><input type="checkbox" data-id="k1"><span>Quellen noch einmal gelesen, wichtigste Aussagen parat</span></label>
+        <label class="chk"><input type="checkbox" data-id="k2"><span>Kann meine Kernaussagen mit eigenen Worten erklären</span></label>
+        <label class="chk"><input type="checkbox" data-id="k3"><span>Antworten zum Arbeitsprozess und zur KI-Nutzung vorbereitet</span></label>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOADS -->
+  <section class="sec" id="s-downloads">
+    <div class="sec-head">
+      <p class="eyebrow">Material</p>
+      <h2>Alles zum Herunterladen</h2>
+      <p class="lead">Dieses Material findest du auch auf IServ.</p>
+    </div>
+    <div class="grid g2">
+      <div class="card dl"><span class="fi"><svg class="ico"><use href="#i-doc"/></svg></span><div class="t"><b>GFS-Leitfaden für Schüler:innen</b><span>Alles Wichtige auf 5 Seiten</span></div><div class="links"><a class="badge pdf" href="material/sus-leitfaden-gfs-ek.pdf" download>PDF</a><a class="badge docx" href="material/sus-leitfaden-gfs-ek.docx" download>DOCX</a></div></div>
+      <div class="card dl"><span class="fi"><svg class="ico"><use href="#i-doc"/></svg></span><div class="t"><b>Merkblatt GFS-Handout</b><span>Vorlage mit Aufbau und Checkliste</span></div><div class="links"><a class="badge pdf" href="material/merkblatt-handout.pdf" download>PDF</a><a class="badge docx" href="material/merkblatt-handout.docx" download>DOCX</a></div></div>
+      <div class="card dl"><span class="fi"><svg class="ico"><use href="#i-doc"/></svg></span><div class="t"><b>Merkblatt Zitieren</b><span>Direkt, indirekt, Harvard oder Fußnote</span></div><div class="links"><a class="badge pdf" href="material/merkblatt-zitieren.pdf" download>PDF</a><a class="badge docx" href="material/merkblatt-zitieren.docx" download>DOCX</a></div></div>
+      <div class="card dl"><span class="fi"><svg class="ico"><use href="#i-doc"/></svg></span><div class="t"><b>Merkblatt Bibliografieren</b><span>Schemata mit Beispielen</span></div><div class="links"><a class="badge pdf" href="material/merkblatt-bibliografieren.pdf" download>PDF</a><a class="badge docx" href="material/merkblatt-bibliografieren.docx" download>DOCX</a></div></div>
+      <div class="card dl"><span class="fi"><svg class="ico"><use href="#i-chat"/></svg></span><div class="t"><b>Leitfaden Kolloquium</b><span>Alle möglichen Fragebereiche A–E</span></div><div class="links"><a class="badge pdf" href="material/leitfaden-kolloquium.pdf" download>PDF</a><a class="badge docx" href="material/leitfaden-kolloquium.docx" download>DOCX</a></div></div>
+      <div class="card dl"><span class="fi"><svg class="ico"><use href="#i-pen"/></svg></span><div class="t"><b>Formatvorlage schriftliche Ausarbeitung</b><span>Nur wenn du dieses Format wählst</span></div><div class="links"><a class="badge docx" href="material/formatvorlage-schriftliche-ausarbeitung.docx" download>DOCX</a></div></div>
+      <div class="card dl"><span class="fi"><svg class="ico"><use href="#i-sheet"/></svg></span><div class="t"><b>Bewertungsbogen</b><span>Alle Fächer außer Fremdsprachen</span></div><div class="links"><a class="badge pdf" href="material/bewertungsbogen-ek.pdf" download>PDF</a><a class="badge docx" href="material/bewertungsbogen-ek.docx" download>DOCX</a></div></div>
+      <div class="card dl"><span class="fi"><svg class="ico"><use href="#i-sheet"/></svg></span><div class="t"><b>Bewertungsbogen Fremdsprachen</b><span>Mit Kriterien zur Sprachkompetenz</span></div><div class="links"><a class="badge pdf" href="material/bewertungsbogen-ek-fremdsprachen.pdf" download>PDF</a><a class="badge docx" href="material/bewertungsbogen-ek-fremdsprachen.docx" download>DOCX</a></div></div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="sec" id="s-faq">
+    <div class="sec-head">
+      <p class="eyebrow">FAQ</p>
+      <h2>Häufige Fragen</h2>
+    </div>
+    <details class="acc"><summary>Wen frage ich, wenn ich nicht weiterweiß?</summary><div class="body">Bei <strong>inhaltlichen und formalen Fragen</strong> zur GFS hilft dir deine Fachlehrkraft. Bei <strong>organisatorischen Fragen</strong> zur Planung und Fachwahl hilft dir deine Klassenlehrkraft.</div></details>
+    <details class="acc"><summary>Muss ich noch eine schriftliche Ausarbeitung schreiben?</summary><div class="body">Nein. Seit dem Schuljahr 2026/27 sind <strong>Handout und Kolloquium Pflicht</strong>, eine schriftliche Ausarbeitung nicht mehr. Du kannst sie aber als Format wählen. Dann verwendest du die digitale Formatvorlage.</div></details>
+    <details class="acc"><summary>Kann die GFS eine Klassenarbeit ersetzen?</summary><div class="body">Nein. Sie zählt wie eine <strong>zusätzliche</strong> Klassenarbeit in dem Fach, in dem du sie hältst.</div></details>
+    <details class="acc"><summary>Was passiert, wenn ich mich nicht rechtzeitig für ein Fach melde?</summary><div class="body">Jede FL betreut höchstens 3 Schüler:innen pro Klasse, und wer sich zuerst meldet, bekommt den Platz. Wenn du dich gar nicht meldest, teilt dir die Klassenlehrkraft ein Fach zu.</div></details>
+    <details class="acc"><summary>Wann ist mein Präsentationstermin?</summary><div class="body">Den Termin legt deine Fachlehrkraft im 2. Schulhalbjahr fest, ebenso die Abgabe des Handouts. Das Handout gibst du spätestens zu Beginn der Präsentation ab, auf Absprache auch früher.</div></details>
+    <details class="acc"><summary>Wann erfahre ich meine Note?</summary><div class="body">Die Gesamtnote bekommst du, sobald alle drei Teilnoten feststehen. Die Rückmeldung soll möglichst bald kommen, spätestens nach etwa 3–4 Wochen.</div></details>
+    <details class="acc"><summary>Wo finde ich die Grobthemen und das Material aus der IF-Stunde?</summary><div class="body">Die Grobthemen findest du auf der IServ-Klassenplattform, die Materialien der IF-Stunde unter IServ › Dateien.</div></details>
+  </section>
+
+</div>
+</div>
+
+<!-- =========================================================
+     REITER 2: LEHRKRÄFTE
+     ========================================================= -->
+<div class="panel" id="p-lehrkraefte" role="tabpanel" aria-labelledby="t-lehrkraefte" hidden>
+<div class="wrap">
+
+  <section class="sec hero" id="l-start">
+    <p class="eyebrow">Für Lehrkräfte · Prozessbeschreibung EK</p>
+    <h1>GFS in der Eingangsklasse – <em>Neukonzeption ab SJ 2026/27</em></h1>
+    <p class="lead">Jede:r Schüler:in hält in der EK eine GFS nach der gültigen BGVO, als Vorbereitung auf die GFSen in den Jahrgangsstufen. Die GFS zählt wie eine weitere Klassenarbeit, kann aber keine ersetzen.</p>
+
+    <div class="grid g2 mt2">
+      <div class="card reveal">
+        <h3 style="margin-bottom:12px">Was ist neu?</h3>
+        <p style="font-size:.95rem">Die <strong>verpflichtende schriftliche Ausarbeitung entfällt</strong>, weil eine eigenständige schriftliche Leistung in Zeiten von KI immer schwerer nachweisbar ist. Stattdessen sind <strong>Handout und Kolloquium verpflichtend</strong>. So wird zeitgemäßes Prüfen möglich, und Kompetenzen werden sichtbar, die bei klassischen Leistungserhebungen nicht zutage treten.</p>
+        <p style="font-size:.85rem;color:var(--muted);margin-top:10px">Beschluss der Fachbereichskonferenz (2 Gegenstimmen)</p>
+      </div>
+      <div class="card reveal">
+        <h3 style="margin-bottom:12px">Entwicklung</h3>
+        <ul class="hist">
+          <li><b>SJ 2023/24</b><span>Neugestaltung: wöchentliche IF-Stunde in der EK statt fester Input-Phasen durch verschiedene Lehrkräfte</span></li>
+          <li><b>SJ 2024/25</b><span>„Umgang mit KI“ wird eigenes Thema in der IF-Stunde</span></li>
+          <li class="cur"><b>SJ 2026/27</b><span>Handout und Kolloquium werden Pflicht, die schriftliche Ausarbeitung wird ein Format unter mehreren</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <table class="tbl mt reveal">
+      <thead><tr><th>Pflichtbestandteil</th><th>Gewichtung</th><th>Inhalt</th><th>Material</th></tr></thead>
+      <tbody>
+        <tr><td>Handout</td><td data-l="Gewichtung">5–20 %</td><td data-l="Inhalt">erweitertes Handout auf bis zu 2 Seiten inkl. Zitaten und Bibliografie</td><td data-l="Material">Merkblätter Handout, Zitieren, Bibliografieren</td></tr>
+        <tr><td>Durchführung</td><td data-l="Gewichtung">40–60 %</td><td data-l="Inhalt">in einem geeigneten Format: Vortrag, Führung, Veranstaltung, Experiment, Projekt, schriftliche Ausarbeitung, Unterrichtsstunde …</td><td data-l="Material">GFS-Bewertungsbogen EK</td></tr>
+        <tr><td>Kolloquium</td><td data-l="Gewichtung">35–40 %</td><td data-l="Inhalt">10–12 Min. inhaltliche und methodische Überprüfung im Anschluss an die Durchführung</td><td data-l="Material">Leitfaden GFS-Kolloquium</td></tr>
+      </tbody>
+    </table>
+    <p class="note mt"><svg class="ico"><use href="#i-info"/></svg><span>Die FL legt die Gewichtung innerhalb der Spannen individuell fest (Summe 100 %) und teilt sie spätestens bei der Themenabsprache mit.</span></p>
+  </section>
+
+  <section class="sec" id="l-terminplan">
+    <div class="sec-head">
+      <p class="eyebrow">Terminplan</p>
+      <h2>Ablauf im Schuljahr</h2>
+    </div>
+    <table class="tbl">
+      <thead><tr><th>Wann</th><th>Was</th><th>Wer</th><th>Hinweise</th></tr></thead>
+      <tbody>
+        <tr><td>Erste Fachbereichssitzung</td><td data-l="Was">Grobplanung der GFS-Themen</td><td data-l="Wer"><span class="who">KL, FL</span></td><td data-l="Hinweise"><ul><li>Jede FL bereitet 3 Grobthemen für ihr Fach vor. Passende Literatur kann bei EX für die Schulbücherei vorbestellt werden.</li><li>Die KL sammelt die Vorschläge in der Tabelle „GFS-Planung Grobthemen EK“.</li></ul></td></tr>
+        <tr><td>Vor den Herbstferien</td><td data-l="Was">Info an die Klasse</td><td data-l="Wer"><span class="who">KL</span></td><td data-l="Hinweise"><ul><li>Die KL informiert über die GFS-Leistung und die Termine und stellt die Grobthemen vor.</li><li>Die Tabelle kommt auf IServ (z. B. als Collabora-Dokument), und die SuS tragen sich ein.</li></ul></td></tr>
+        <tr><td>Vor den Weihnachtsferien</td><td data-l="Was">Fachwahl und Rücksprache mit der FL</td><td data-l="Wer"><span class="who">SuS</span> <span class="who">KL</span></td><td data-l="Hinweise"><ul><li>Max. 3 SuS pro FL und Klasse, nach dem Prinzip „first come, first serve“.</li><li>Für eine gerechte Verteilung kann die KL Fächer zuweisen. Wer sich nicht einträgt, bekommt ein Fach zugeteilt.</li><li>Die KL stellt die Übersicht für das Kollegium in die Wolke und für die SuS auf IServ.</li></ul></td></tr>
+        <tr><td>Ab Januar</td><td data-l="Was">Inputphase in der IF-Stunde</td><td data-l="Wer"><span class="who">FL IF-Stunde / Zukunftswerkstatt</span></td><td data-l="Hinweise"><ul><li>Einführung (Definition, Erwartungen, Kriterien, Formate) und Material im IServ-Ordner</li><li>Themenfindung und Problemorientierung, Recherche, Einführung in die Schulbücherei (ggf. Uni-Bibliothek Tübingen oder Landesbibliothek Stuttgart, Termine rechtzeitig abstimmen)</li><li>Handout, Zitieren, Bibliografieren, Umgang mit KI</li><li>Präsentation (Do's &amp; Don'ts), Kolloquium üben</li><li>Einführung, Material und Bibliotheksbesuch <em>vor</em> dem Workshoptag, alles Weitere danach begleitend am eigenen Thema</li></ul></td></tr>
+        <tr><td>Erste Februarwoche</td><td data-l="Was">GFS-Workshoptag (1.–4. Stunde)</td><td data-l="Wer"><span class="who">FL</span></td><td data-l="Hinweise"><ul><li>Liegt nach der Ausgabe der Halbjahresinformationen.</li><li>Intensive Einzelbetreuung: konkretes Thema und Fragestellung, Format, erste Recherche, erste Gliederung des Handouts, erste Überlegungen zur Durchführung</li></ul></td></tr>
+        <tr><td>2. Schulhalbjahr</td><td data-l="Was">Erstellung, Durchführung, Kolloquium, Bewertung und Feedback</td><td data-l="Wer"><span class="who">FL</span></td><td data-l="Hinweise"><ul><li>Die FL setzt die Termine für Handout-Abgabe und Durchführung individuell fest.</li><li>Das Kolloquium folgt direkt im Anschluss oder zeitnah.</li><li>Termin versäumt: finaler Termin, danach Teilnote 6,0.</li><li>Optional formlose Vorkorrektur oder mündliches Feedback</li></ul></td></tr>
+        <tr><td>Spätestens zur Notenabgabe Ende 2. HJ</td><td data-l="Was">Eintrag der GFS-Leistung</td><td data-l="Wer"><span class="who">FL</span></td><td data-l="Hinweise">Thema, Datum und Endnote in die „GFS-Planungsübersicht EK für KL und FL“ der Klasse eintragen.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="sec" id="l-betreuung">
+    <div class="sec-head">
+      <p class="eyebrow">Betreuung</p>
+      <h2>Themenabsprache, Betreuung, Bewertung</h2>
+    </div>
+    <div class="grid g3">
+      <div class="card reveal">
+        <h3 style="margin-bottom:10px">Bei der Themenabsprache klären</h3>
+        <ul class="minirules">
+          <li>Konkretes Thema und Fragestellung bzw. Problemorientierung</li>
+          <li>GFS-Format</li>
+          <li>Termine für Handout, Durchführung und Kolloquium</li>
+          <li>Fachspezifische Kriterien und Gewichtung</li>
+          <li>Vorgaben zum KI-Einsatz</li>
+        </ul>
+      </div>
+      <div class="card reveal">
+        <h3 style="margin-bottom:10px">Während der Betreuung</h3>
+        <ul class="minirules">
+          <li>Beratung das ganze Jahr über per E-Mail oder zu vereinbarten Gesprächsterminen</li>
+          <li>Gebündelte Betreuung am Workshoptag</li>
+          <li>Optional: Vorkorrektur oder mündliches Feedback, Tipp: <a href="https://qwiqr.education/" target="_blank" rel="noopener">qwiqr.education</a> für mündliches Feedback per QR-Code</li>
+        </ul>
+      </div>
+      <div class="card reveal">
+        <h3 style="margin-bottom:10px">Bewertung &amp; Rückmeldung</h3>
+        <ul class="minirules">
+          <li>Drei Teilnoten nach dem Bewertungsbogen</li>
+          <li>Gesamtnote erst bekannt geben, wenn alle Teilleistungen vorliegen</li>
+          <li>Rückmeldung möglichst zeitnah, spätestens nach 3–4 Wochen</li>
+          <li>Nach der Präsentation Feedback geben, ggf. füllen die Mitschüler:innen Feedbackbögen aus</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="l-kolloquium">
+    <div class="sec-head">
+      <p class="eyebrow">Kolloquium</p>
+      <h2>Gesprächsleitfaden</h2>
+      <p class="lead">Ziel ist die inhaltliche Überprüfung der eigenständigen Auseinandersetzung mit dem Thema. Dauer ca. 10–12 Minuten, im Plenum oder individuell nach Entscheidung der FL.</p>
+    </div>
+    <div class="note" style="margin-bottom:16px"><svg class="ico"><use href="#i-info"/></svg><span><strong>Pflicht:</strong> Die Bereiche A–D müssen abgedeckt sein, ebenso die <strong>Anforderungsbereiche I–III</strong>. Bereich E dient der individuellen Vertiefung.</span></div>
+    <details class="acc" open><summary>A – Inhalt und Fachwissen</summary><div class="body"><p style="color:var(--muted);margin-bottom:8px">Hat die/der Schüler:in das Thema durchdrungen und kann über den Vortrag hinaus argumentieren?</p><ul><li>Formuliere in zwei Sätzen die zentrale These bzw. das zentrale Ergebnis deiner GFS.</li><li>Erkläre und begründe, was für dich die wichtigste Erkenntnis war.</li><li>Benenne und beurteile Gegenargumente oder alternative Positionen zu deiner These.</li><li>Erkläre, wie [Aspekt 1] und [Aspekt 2] aus deinem Vortrag zusammenhängen.</li><li>Prüfe, was sich an deinem Ergebnis ändern würde, wenn [Bedingung X] anders wäre.</li></ul></div></details>
+    <details class="acc"><summary>B – Methodisches Vorgehen</summary><div class="body"><p style="color:var(--muted);margin-bottom:8px">Kann die/der Schüler:in den eigenen Arbeitsprozess reflektieren?</p><ul><li>Beschreibe, wie du dich dem Thema angenähert hast. Was war dein erster Schritt?</li><li>Erkläre, warum du dieses Format gewählt hast.</li><li>Setze dich mit einer Schwierigkeit auseinander und erkläre, wie du sie gelöst hast.</li><li>Erörtere, was du bei zukünftigen Arbeiten gleich bzw. anders machen würdest.</li></ul></div></details>
+    <details class="acc"><summary>C – Recherche und Quellenkritik</summary><div class="body"><p style="color:var(--muted);margin-bottom:8px">Wurden die Quellen bewusst ausgewählt und kritisch bewertet?</p><ul><li>Erläutere, warum du genau diese Quellen ausgewählt hast.</li><li>Erkläre, wie du die Zuverlässigkeit und Seriosität einer Quelle eingeschätzt hast.</li><li>Begründe, welche Quelle für deine Argumentation am wichtigsten war.</li></ul></div></details>
+    <details class="acc"><summary>D – Nutzung von KI</summary><div class="body"><p style="color:var(--muted);margin-bottom:8px">Transparenz über den KI-Einsatz herstellen und die eigenständige Leistung überprüfen.</p><ul><li>Beschreibe, wie du KI in der GFS genutzt hast.</li><li>Erkläre, wie du Prompts gestaltet und angepasst hast.</li><li>Reflektiere, wofür KI hilfreich war und wo nicht.</li><li>Beschreibe, wie du KI-Informationen auf Korrektheit geprüft hast.</li><li>Beschreibe, welche Teile dein eigener, unverwechselbarer Beitrag sind.</li><li>Erörtere die Grenzen von KI bei einem Thema wie deinem.</li></ul></div></details>
+    <details class="acc"><summary>E – Individuelle Fragen der Lehrkraft</summary><div class="body">Themenspezifische oder vortragsbezogene Fragen nach Ermessen der FL.</div></details>
+  </section>
+
+  <section class="sec" id="l-bewertung">
+    <div class="sec-head">
+      <p class="eyebrow">Bewertungsbogen</p>
+      <h2>Kriterien im Überblick</h2>
+      <p class="lead">Jedes Kriterium wird mit 0–3 Punkten bewertet (3 = vollständig, 2 = überwiegend, 1 = teilweise, 0 = nicht oder kaum erfüllt). Die <span style="background:var(--gold-soft);padding:0 4px;border-radius:4px">markierten</span> Kriterien gibt es nur im Bogen für Fremdsprachen.</p>
+    </div>
+    <details class="acc"><summary>Teil 1 · Handout (5–20 %)</summary><div class="body">
+      <p class="crit-h">Inhalt</p><ul class="crit"><li>Fragestellung / Problemorientierung klar erkennbar</li><li>Fachliche Korrektheit</li><li>Inhaltliche Vollständigkeit</li><li>Logische Struktur und roter Faden</li><li>Eigenständige Auseinandersetzung (nicht reine Reproduktion)</li><li>Fazit / Ergebnis formuliert und schlüssig</li></ul>
+      <p class="crit-h">Wissenschaftliches Arbeiten</p><ul class="crit"><li>Quellenauswahl: seriös, themenrelevant, ausreichend (mind. 3)</li><li>Korrekte Zitierweise</li><li>Quellenverzeichnis vollständig</li></ul>
+      <p class="crit-h">Sprache und Form</p><ul class="crit"><li>Fachsprache angemessen und korrekt</li><li>Sprachliche Korrektheit</li><li>Formale Vorgaben (Umfang, Layout, Kopfzeile)</li><li class="fs">Grammatische Korrektheit · Wortschatz · Ausdruck und Satzbau · Orthografie und Zeichensetzung · Register (in der Zielsprache)</li></ul>
+    </div></details>
+    <details class="acc"><summary>Teil 2 · Durchführung (40–60 %)</summary><div class="body">
+      <p class="crit-h">Inhalt</p><ul class="crit"><li>Fachliche Korrektheit</li><li>Inhaltliche Tiefe</li><li>Problemorientierung und Argumentation</li><li>Strukturiertheit und roter Faden</li><li>Eigenständige Erarbeitung</li><li>Angemessener Umgang mit Komplexität</li></ul>
+      <p class="crit-h">Vortrag / Durchführung (für das Format Präsentation)</p><ul class="crit"><li>Freier Vortrag</li><li>Klare, verständliche Sprache, angemessenes Tempo</li><li>Sinnvoller Einsatz von Medien und Materialien</li><li>Zeitmanagement</li><li class="fs">Mündliche Sprachkompetenz: Grammatik · Wortschatz · Aussprache und Intonation · Flüssigkeit · Register</li></ul>
+      <p class="crit-h">Auftreten und Kommunikation</p><ul class="crit"><li>Sicherheit und Souveränität</li><li>Blickkontakt und Körpersprache</li><li>Publikumsorientierung</li></ul>
+      <p class="crit-h">Weitere Kriterien</p><ul class="crit"><li>Freie Zeilen für formatspezifische Kriterien. Bei anderen Formaten als der Präsentation legt die FL die Kriterien fest.</li></ul>
+    </div></details>
+    <details class="acc"><summary>Teil 3 · Kolloquium (35–40 %)</summary><div class="body">
+      <ul class="crit"><li>Fachliche Korrektheit und Tiefe der Antworten</li><li>Eigenständigkeit (nicht auswendig gelernt)</li><li>Reflexion des eigenen Arbeitsprozesses</li><li>Quellenkenntnis und Quellenkritik</li><li>Transparenter und reflektierter Umgang mit KI</li><li>Souveränität und Gesprächsfähigkeit</li><li class="fs">Sprache unter spontanen Bedingungen: Grammatik · Wortschatz · Flüssigkeit und Reaktionsfähigkeit · Kommunikationsstrategien</li></ul>
+      <p class="note mt"><svg class="ico"><use href="#i-spark"/></svg><span><strong>KI-Kriterium:</strong> Bewertet wird nicht, <em>ob</em> KI eingesetzt wurde, sondern der Umgang damit: Wurde der Einsatz offengelegt? Wurden KI-Ausgaben kritisch überprüft? Kann die/der Schüler:in den eigenen Beitrag klar benennen?</span></p>
+    </div></details>
+  </section>
+
+  <section class="sec" id="l-ablage">
+    <div class="sec-head">
+      <p class="eyebrow">Ablageorte</p>
+      <h2>Wo liegt was?</h2>
+    </div>
+    <div class="grid g2">
+      <div class="card reveal">
+        <h3 style="display:flex;gap:8px;align-items:center;margin-bottom:12px"><svg class="ico"><use href="#i-folder"/></svg>Wolke (Kollegium)</h3>
+        <dl class="kv">
+          <div><dt>Kriterien, Leitfäden, Bewertungsbögen</dt><dd class="path">Wolke › Lehrkräfte_Verwaltung › 4 SGG_Verwaltung › GFS</dd></div>
+          <div><dt>Grobthemen-Tabelle EK</dt><dd class="path">Wolke › Lehrkräfte_kollaborativer Bereich › Jahrgangsordner</dd></div>
+          <div><dt>Planungsübersicht &amp; Noteneintrag</dt><dd class="path">Wolke › Lehrkräfte_kollaborativer Bereich › SGG_Abteilungsarbeit › Klassenordner</dd></div>
+        </dl>
+      </div>
+      <div class="card reveal">
+        <h3 style="display:flex;gap:8px;align-items:center;margin-bottom:12px"><svg class="ico"><use href="#i-folder"/></svg>IServ (Schüler:innen)</h3>
+        <dl class="kv">
+          <div><dt>Grobthemen zur Fachwahl</dt><dd class="path">IServ › Klassenplattform (von der KL)</dd></div>
+          <div><dt>Material der IF-Stunde</dt><dd class="path">IServ › Dateien (von der FL der IF-Stunde)</dd></div>
+          <div><dt>Fach-/FL-Übersicht</dt><dd class="path">IServ (von der KL bereitgestellt)</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="l-downloads">
+    <div class="sec-head">
+      <p class="eyebrow">Material</p>
+      <h2>Downloads für Lehrkräfte</h2>
+    </div>
+    <p class="dl-group">Planung &amp; Prozess</p>
+    <div class="grid g2">
+      <div class="card dl"><span class="fi"><svg class="ico"><use href="#i-doc"/></svg></span><div class="t"><b>Prozessbeschreibung GFS EK</b><span>für Lehrkräfte, Stand 12.06.26</span></div><div class="links"><a class="badge pdf" href="material/lul-prozessbeschreibung-ek.pdf" download>PDF</a><a class="badge docx" href="material/lul-prozessbeschreibung-ek.docx" download>DOCX</a></div></div>
+      <div class="card dl"><span class="fi"><svg class="ico"><use href="#i-sheet"/></svg></span><div class="t"><b>GFS-Planung Grobthemen EK</b><span>Vorlage für die KL</span></div><div class="links"><a class="badge docx" href="material/lul-grobthemen-ek.docx" download>DOCX</a></div></div>
+      <div class="card dl"><span class="fi"><svg class="ico"><use href="#i-sheet"/></svg></span><div class="t"><b>Planungsformular EK für KL und FL</b><span>Übersicht und Noteneintrag</span></div><div class="links"><a class="badge docx" href="material/lul-planungsformular-ek-kl-fl.docx" download>DOCX</a></div></div>
+    </div>
+    <p class="dl-group">Kolloquium &amp; Bewertung</p>
+    <div class="grid g2">
+      <div class="card dl"><span class="fi"><svg class="ico"><use href="#i-chat"/></svg></span><div class="t"><b>Leitfaden GFS-Kolloquium</b><span>Fragebereiche A–E mit Kopfdaten</span></div><div class="links"><a class="badge pdf" href="material/leitfaden-kolloquium.pdf" download>PDF</a><a class="badge docx" href="material/leitfaden-kolloquium.docx" download>DOCX</a></div></div>
+      <div class="card dl"><span class="fi"><svg class="ico"><use href="#i-sheet"/></svg></span><div class="t"><b>Bewertungsbogen EK</b><span>Alle Fächer außer Fremdsprachen</span></div><div class="links"><a class="badge pdf" href="material/bewertungsbogen-ek.pdf" download>PDF</a><a class="badge docx" href="material/bewertungsbogen-ek.docx" download>DOCX</a></div></div>
+      <div class="card dl"><span class="fi"><svg class="ico"><use href="#i-sheet"/></svg></span><div class="t"><b>Bewertungsbogen EK Fremdsprachen</b><span>Mit Kriterien zur Sprachkompetenz</span></div><div class="links"><a class="badge pdf" href="material/bewertungsbogen-ek-fremdsprachen.pdf" download>PDF</a><a class="badge docx" href="material/bewertungsbogen-ek-fremdsprachen.docx" download>DOCX</a></div></div>
+    </div>
+    <p class="dl-group">Material für Schüler:innen</p>
+    <div class="grid g2">
+      <div class="card dl"><span class="fi"><svg class="ico"><use href="#i-doc"/></svg></span><div class="t"><b>Leitfaden für Schüler:innen</b><span>zum Weitergeben</span></div><div class="links"><a class="badge pdf" href="material/sus-leitfaden-gfs-ek.pdf" download>PDF</a><a class="badge docx" href="material/sus-leitfaden-gfs-ek.docx" download>DOCX</a></div></div>
+      <div class="card dl"><span class="fi"><svg class="ico"><use href="#i-doc"/></svg></span><div class="t"><b>Merkblätter Handout · Zitieren · Bibliografieren</b><span>jeweils als PDF</span></div><div class="links"><a class="badge pdf" href="material/merkblatt-handout.pdf" download>H</a><a class="badge pdf" href="material/merkblatt-zitieren.pdf" download>Z</a><a class="badge pdf" href="material/merkblatt-bibliografieren.pdf" download>B</a></div></div>
+    </div>
+  </section>
+
+  <section class="sec" id="l-js">
+    <div class="sec-head">
+      <p class="eyebrow">Ausblick</p>
+      <h2>GFS in J1 und J2</h2>
+      <p class="lead">Nur zur Orientierung: Für die Jahrgangsstufen gelten eigene Regeln.</p>
+    </div>
+    <details class="acc">
+      <summary>Prozess in den Jahrgangsstufen (Stand 10.01.26)</summary>
+      <div class="body">
+        <ul>
+          <li>Laut BGVO § 16 Abs. 3 sind in den ersten drei Schulhalbjahren der Jahrgangsstufen GFSen in <strong>drei Fächern</strong> zu erbringen. Die Fächer werden spätestens 6 Wochen nach Unterrichtsbeginn gewählt. Freiwillig ist eine GFS in einem weiteren Fach möglich.</li>
+          <li>Die SuS planen ihre GFSen bis zu den Herbstferien und lassen sie mit dem Planungsformular JS von der FL bestätigen. Die Formulare gehen an die Tutor:innen.</li>
+          <li>Eine FL muss höchstens <strong>5 GFSen pro Jahrgang</strong> annehmen. Die Tutor:innen koordinieren und führen die Gesamtübersicht.</li>
+          <li>Die FL trägt Notenpunkte, Halbjahr, Datum und Thema in das Planungsformular JS ein. Nicht erbrachte Leistung: 0 NP.</li>
+          <li>Für die schriftliche Ausarbeitung ist die digitale Formatvorlage verpflichtend.</li>
+        </ul>
+      </div>
+    </details>
+    <details class="acc">
+      <summary>Pilotformat „Kolloquium plus Handout“</summary>
+      <div class="body">
+        <ul>
+          <li>Erprobt seit dem SJ 2025/26: Kolloquium auf Basis eines Handouts, um die Atmosphäre einer mündlichen Prüfung kennenzulernen.</li>
+          <li>Handout auf 1 Seite mit ca. 5 Thesen, Zitaten oder Grafiken plus 2–3 Fachartikel, Abgabe 2 Wochen vor dem Kolloquium.</li>
+          <li>Kolloquium ca. 15 Minuten, Notenbildung ¼ Handout und ¾ Kolloquium.</li>
+          <li>Ein Prüfungsprotokoll wird empfohlen, bei Bedarf mit einer zweiten Lehrkraft. Erfahrungswerte sind ausdrücklich erwünscht.</li>
+        </ul>
+      </div>
+    </details>
+    <div class="grid g2 mt">
+      <div class="card dl"><span class="fi"><svg class="ico"><use href="#i-doc"/></svg></span><div class="t"><b>Prozessbeschreibung Jahrgangsstufen</b><span>BGVO und Beschlüsse</span></div><div class="links"><a class="badge pdf" href="material/js-prozessbeschreibung.pdf" download>PDF</a><a class="badge docx" href="material/js-prozessbeschreibung.docx" download>DOCX</a></div></div>
+      <div class="card dl"><span class="fi"><svg class="ico"><use href="#i-sheet"/></svg></span><div class="t"><b>Planungsformular JS für SuS</b><span>mit Bestätigung durch die FL</span></div><div class="links"><a class="badge pdf" href="material/js-planungsformular-sus.pdf" download>PDF</a><a class="badge docx" href="material/js-planungsformular-sus.docx" download>DOCX</a></div></div>
+      <div class="card dl"><span class="fi"><svg class="ico"><use href="#i-sheet"/></svg></span><div class="t"><b>Planungsformular JS für KL und FL</b><span>Gesamtübersicht</span></div><div class="links"><a class="badge docx" href="material/js-planungsformular-kl-fl.docx" download>DOCX</a></div></div>
+      <div class="card dl"><span class="fi"><svg class="ico"><use href="#i-doc"/></svg></span><div class="t"><b>Pilotphase: Prozessbeschreibung</b><span>Kolloquium plus Handout</span></div><div class="links"><a class="badge pdf" href="material/js-pilotphase-kolloquium-handout.pdf" download>PDF</a><a class="badge docx" href="material/js-pilotphase-kolloquium-handout.docx" download>DOCX</a></div></div>
+      <div class="card dl"><span class="fi"><svg class="ico"><use href="#i-doc"/></svg></span><div class="t"><b>Pilotformat: Anforderungen</b><span>für Schüler:innen</span></div><div class="links"><a class="badge pdf" href="material/js-kph-anforderungen.pdf" download>PDF</a></div></div>
+      <div class="card dl"><span class="fi"><svg class="ico"><use href="#i-doc"/></svg></span><div class="t"><b>Pilotformat: Beispiel-Handouts</b><span>Anschauungsmaterial</span></div><div class="links"><a class="badge pdf" href="material/js-kph-beispiele-handouts.pdf" download>PDF</a></div></div>
+      <div class="card dl"><span class="fi"><svg class="ico"><use href="#i-chat"/></svg></span><div class="t"><b>Pilotformat: Leitfaden Kolloquium</b><span>für Lehrkräfte</span></div><div class="links"><a class="badge pdf" href="material/js-kph-leitfaden-kolloquium.pdf" download>PDF</a><a class="badge docx" href="material/js-kph-leitfaden-kolloquium.docx" download>DOCX</a></div></div>
+      <div class="card dl"><span class="fi"><svg class="ico"><use href="#i-sheet"/></svg></span><div class="t"><b>Pilotformat: Bewertung &amp; Protokoll</b><span>Vorlage</span></div><div class="links"><a class="badge pdf" href="material/js-kph-bewertung-protokoll.pdf" download>PDF</a><a class="badge docx" href="material/js-kph-bewertung-protokoll.docx" download>DOCX</a></div></div>
+    </div>
+  </section>
+
+</div>
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>SGG · Arbeitsgruppe GFS · Stand der Unterlagen: 12.06.2026</span>
+    <button class="theme-btn" type="button" id="theme-btn">Hell / Dunkel</button>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  /* ---------- Speicher (fehlertolerant) ---------- */
+  function load(k){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}}
+  function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+
+  /* ---------- Reiter + URL-Hash ---------- */
+  var tabs=[].slice.call(document.querySelectorAll('.tab'));
+  function show(name,scrollTop){
+    tabs.forEach(function(t){
+      var on=t.dataset.tab===name;
+      t.setAttribute('aria-selected',on);t.tabIndex=on?0:-1;
+      document.getElementById('p-'+t.dataset.tab).hidden=!on;
+      document.getElementById('nav-'+t.dataset.tab).hidden=!on;
+    });
+    if(scrollTop) window.scrollTo({top:0});
+    observeSections();
+  }
+  function fromHash(){
+    var h=location.hash.slice(1);
+    if(h==='lehrkraefte'||h.indexOf('l-')===0){show('lehrkraefte');}
+    else{show('schueler');}
+    if(h && h!=='schueler' && h!=='lehrkraefte'){var el=document.getElementById(h);if(el)setTimeout(function(){el.scrollIntoView();},0);}
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){history.replaceState(null,'','#'+t.dataset.tab);show(t.dataset.tab,true);});
+    t.addEventListener('keydown',function(e){
+      if(e.key==='ArrowRight'||e.key==='ArrowLeft'){var n=tabs[(i+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length];n.focus();n.click();}
+    });
+  });
+  window.addEventListener('hashchange',fromHash);
+
+  /* ---------- Aktiver Abschnitt in der Unternavigation ---------- */
+  var io;
+  function observeSections(){
+    if(io) io.disconnect();
+    if(!('IntersectionObserver' in window)) return;
+    var nav=document.querySelector('.subnav:not([hidden])'); if(!nav) return;
+    var links=[].slice.call(nav.querySelectorAll('a'));
+    io=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          links.forEach(function(a){
+            var on=a.getAttribute('href')==='#'+en.target.id;
+            a.classList.toggle('active',on);
+            if(on){var l=a.offsetLeft-nav.clientWidth/2+a.clientWidth/2;nav.scrollTo({left:l,behavior:'smooth'});}
+          });
+        }
+      });
+    },{rootMargin:'-45% 0px -50% 0px'});
+    links.forEach(function(a){var s=document.querySelector(a.getAttribute('href'));if(s)io.observe(s);});
+  }
+
+  /* ---------- „Jetzt“-Markierung im Zeitstrahl (nach Monat, ungefähr) ---------- */
+  (function(){
+    var d=new Date(),m=d.getMonth()+1,day=d.getDate(),p;
+    if(m>=8&&m<=10)p=0; else if(m>=11)p=1; else if(m===1)p=2; else if(m===2&&day<=7)p=3; else p=4;
+    var el=document.querySelector('.step[data-phase="'+p+'"]'); if(el) el.classList.add('now');
+  })();
+
+  /* ---------- Bibliografie-Umschalter ---------- */
+  var bibBtns=[].slice.call(document.querySelectorAll('[data-bib]'));
+  bibBtns.forEach(function(b){
+    b.addEventListener('click',function(){
+      bibBtns.forEach(function(x){x.setAttribute('aria-selected',x===b);});
+      document.querySelectorAll('[data-bibpanel]').forEach(function(p){p.hidden=p.dataset.bibpanel!==b.dataset.bib;});
+    });
+  });
+
+  /* ---------- Kopieren ---------- */
+  document.querySelectorAll('.copy').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var txt=btn.parentNode.textContent.replace(btn.textContent,'').trim();
+      var done=function(){var o=btn.lastChild.textContent;btn.lastChild.textContent='Kopiert';setTimeout(function(){btn.lastChild.textContent=o;},1400);};
+      if(navigator.clipboard){navigator.clipboard.writeText(txt).then(done,function(){});}
+    });
+  });
+
+  /* ---------- Checkliste ---------- */
+  var KEY='gfs-ek-checkliste';
+  var state=load(KEY)||{};
+  var boxes=[].slice.call(document.querySelectorAll('#checklist input'));
+  var C=213.6;
+  function render(){
+    var n=boxes.filter(function(b){return b.checked;}).length, t=boxes.length, pct=Math.round(n/t*100);
+    document.getElementById('ring-fg').setAttribute('stroke-dashoffset',C-C*n/t);
+    document.getElementById('ring-txt').textContent=pct+' %';
+    document.getElementById('cl-status').textContent=n+' von '+t+' erledigt'+(n===t?' – du bist bereit!':'');
+    document.querySelectorAll('.cl-group').forEach(function(g){
+      var b=g.querySelectorAll('input'),c=g.querySelectorAll('input:checked');
+      g.querySelector('h3 small').textContent=c.length+'/'+b.length;
+    });
+  }
+  boxes.forEach(function(b){
+    b.checked=!!state[b.dataset.id];
+    b.addEventListener('change',function(){state[b.dataset.id]=b.checked;save(KEY,state);render();});
+  });
+  document.getElementById('cl-reset').addEventListener('click',function(){state={};save(KEY,state);boxes.forEach(function(b){b.checked=false;});render();});
+  render();
+
+  /* ---------- Hell/Dunkel ---------- */
+  var root=document.documentElement, saved=load('gfs-theme');
+  if(saved) root.setAttribute('data-theme',saved);
+  document.getElementById('theme-btn').addEventListener('click',function(){
+    var dark=root.getAttribute('data-theme')? root.getAttribute('data-theme')==='dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    var next=dark?'light':'dark'; root.setAttribute('data-theme',next); save('gfs-theme',next);
+  });
+
+  /* ---------- Einblenden beim Scrollen ---------- */
+  if('IntersectionObserver' in window){
+    var rv=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');rv.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px'});
+    document.querySelectorAll('.reveal').forEach(function(el){rv.observe(el);});
+  } else { document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');}); }
+
+  /* ---------- Druck: alles aufklappen ---------- */
+  var opened=[];
+  window.addEventListener('beforeprint',function(){document.querySelectorAll('details:not([open])').forEach(function(d){d.open=true;opened.push(d);});document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');});});
+  window.addEventListener('afterprint',function(){opened.forEach(function(d){d.open=false;});opened=[];});
+
+  fromHash();
+})();
+</script>
+</body>
+</html>
